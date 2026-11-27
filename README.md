@@ -15,11 +15,9 @@ cp .env.example .env
 pnpm dev
 ```
 
-Fill in the Appwrite values in `.env` before attempting to authenticate. The app requires these Vite variables:
+The Appwrite endpoint and project ID are configured in `src/lib/appwrite.js`. Fill in the database and collection IDs in `.env` before using exam and attempt data. The app requires these Vite variables:
 
 ```dotenv
-VITE_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-VITE_APPWRITE_PROJECT_ID=your-project-id
 VITE_APPWRITE_DB_ID=your-database-id
 VITE_APPWRITE_EXAMS_COLLECTION_ID=exams
 VITE_APPWRITE_ATTEMPTS_COLLECTION_ID=attempts
@@ -31,7 +29,7 @@ The endpoint, project/database/collection IDs are public browser configuration, 
 
 ### Create a project and add Web Platforms
 
-1. Create an Appwrite Cloud project and copy its Project ID and API endpoint into `.env`.
+1. Create an Appwrite Cloud project and set its Project ID and API endpoint in `src/lib/appwrite.js`.
 2. In **Overview → Add a platform → Web app**, add `localhost` for local development.
 3. Add the GitHub Pages hostname as a second Web platform, for example `username.github.io`. For a project URL like `https://username.github.io/exam-portal/`, the Web platform hostname is `username.github.io` (no path). This is required to avoid browser CORS failures.
 4. Enable Email/Password authentication in the Appwrite Auth settings.
@@ -99,11 +97,11 @@ This allows the owning student to read their own attempt; admins can read/delete
 This repository includes `.github/workflows/deploy-pages.yml`, which builds the static Vite output and deploys it to GitHub Pages on pushes to `main`.
 
 1. Push the repository to GitHub and open **Settings → Pages**. Choose **GitHub Actions** as the build and deployment source.
-2. Open **Settings → Secrets and variables → Actions → Variables** and add these public Vite build variables with the values from your Appwrite project: `VITE_APPWRITE_ENDPOINT`, `VITE_APPWRITE_PROJECT_ID`, `VITE_APPWRITE_DB_ID`, `VITE_APPWRITE_EXAMS_COLLECTION_ID`, and `VITE_APPWRITE_ATTEMPTS_COLLECTION_ID`.
+2. Open **Settings → Secrets and variables → Actions → Variables** and add these public Vite build variables with the values from your Appwrite project: `VITE_APPWRITE_DB_ID`, `VITE_APPWRITE_EXAMS_COLLECTION_ID`, and `VITE_APPWRITE_ATTEMPTS_COLLECTION_ID`.
 3. Push to `main` or run the `Deploy to GitHub Pages` workflow manually. The workflow injects those variables at build time; a static website cannot read GitHub Actions variables after deployment.
 4. Confirm the Pages deployment URL and add its hostname (for example `username.github.io`) as a Web platform in Appwrite as described above.
 
-For a one-off local build, create `.env` with the same values and run `pnpm build`; the generated static site is in `dist/`. The Vite base is deliberately `./` for relative asset loading on GitHub Pages.
+For a one-off local build, create `.env` with the database and collection IDs and run `pnpm build`; the generated static site is in `dist/`. The Vite base is deliberately `./` for relative asset loading on GitHub Pages.
 
 ## 4. Exam behavior and known integrity boundary
 

@@ -1,12 +1,11 @@
 import { Account, Client, Databases, ID, Permission, Query, Role } from 'appwrite';
 
-const env = import.meta.env;
 export const appwriteConfig = {
-  endpoint: env.VITE_APPWRITE_ENDPOINT || '',
-  projectId: env.VITE_APPWRITE_PROJECT_ID || '',
-  databaseId: env.VITE_APPWRITE_DB_ID || '',
-  examsId: env.VITE_APPWRITE_EXAMS_COLLECTION_ID || '',
-  attemptsId: env.VITE_APPWRITE_ATTEMPTS_COLLECTION_ID || '',
+  endpoint: 'https://sgp.cloud.appwrite.io/v1',
+  projectId: '6b09078c001931acb59b',
+  databaseId: import.meta.env.VITE_APPWRITE_DB_ID || '',
+  examsId: import.meta.env.VITE_APPWRITE_EXAMS_COLLECTION_ID || '',
+  attemptsId: import.meta.env.VITE_APPWRITE_ATTEMPTS_COLLECTION_ID || '',
 };
 
 export const missingConfig = Object.entries(appwriteConfig)
@@ -14,9 +13,9 @@ export const missingConfig = Object.entries(appwriteConfig)
   .map(([key]) => key);
 export const isAppwriteConfigured = missingConfig.length === 0;
 
-const client = new Client();
-if (appwriteConfig.endpoint) client.setEndpoint(appwriteConfig.endpoint);
-if (appwriteConfig.projectId) client.setProject(appwriteConfig.projectId);
+export const client = new Client()
+  .setEndpoint(appwriteConfig.endpoint)
+  .setProject(appwriteConfig.projectId);
 
 export const account = new Account(client);
 export const databases = new Databases(client);
